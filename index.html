@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>RULZETHAR — The Hidden War</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<meta name="description" content="Rulzethar — worldbuilding, lore, species, the hidden threat Earth-13 and the future war." />
+<style>
+  :root{
+    --bg:#04040a;
+    --panel: rgba(8,8,12,0.6);
+    --accent:#9b6bff;
+    --accent-2:#44d1ff;
+    --muted:#9ea3b2;
+    --glass: rgba(255,255,255,0.04);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:Inter,system-ui,Arial;
+    background: radial-gradient(ellipse at 20% 10%, rgba(155,107,255,0.06), transparent 8%),
+                radial-gradient(ellipse at 80% 80%, rgba(68,209,255,0.03), transparent 12%),
+                var(--bg);
+    color:#e8eefc;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.5;
+  }
+
+  /* stars background */
+  .stars{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      radial-gradient(white 1px, transparent 1px),
+      radial-gradient(white 1px, transparent 1px);
+    background-size: 2px 2px, 3px 3px;
+    background-position: 0 0, 100px 200px;
+    opacity:0.12;
+    mix-blend-mode:screen;
+  }
+
+  header{
+    position:sticky;top:0;z-index:40;
+    backdrop-filter: blur(6px);
+    background: linear-gradient(180deg, rgba(4,4,8,0.55), rgba(4,4,8,0.15));
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .nav{
+    max-width:1100px;margin:0 auto;display:flex;align-items:center;
+    padding:14px 20px;gap:18px;
+  }
+  .brand{display:flex;align-items:center;gap:12px;font-weight:700}
+  .logo{
+    width:46px;height:46px;border-radius:8px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    display:flex;align-items:center;justify-content:center;font-family:Orbitron;
+    color:#071225;font-weight:700;box-shadow:0 6px 20px rgba(92,61,255,0.16);
+  }
+  nav{margin-left:auto;display:flex;gap:12px}
+  a.nav-link{color:var(--muted);text-decoration:none;padding:8px 10px;border-radius:8px;font-weight:600;font-size:14px}
+  a.nav-link:hover{color:#fff;background:rgba(255,255,255,0.02)}
+
+  .hero{
+    max-width:1100px;margin:36px auto;padding:36px 20px 80px;position:relative;z-index:2;
+    display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;
+  }
+  .hero-card{
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    border-radius:14px;padding:28px;border:1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 12px 40px rgba(8,8,12,0.6);
+  }
+  .eyebrow{color:var(--accent);font-weight:700;letter-spacing:1px;font-size:13px}
+  h1{font-family:Orbitron,monospace;margin:8px 0 12px;font-size:36px;color:#fff}
+  p.lead{color:var(--muted);margin:0 0 18px}
+
+  .cta-row{display:flex;gap:12px}
+  .btn{
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    color:#071225;padding:10px 14px;border-radius:10px;border:none;font-weight:700;cursor:pointer;
+    box-shadow:0 6px 20px rgba(75,50,200,0.18);
+  }
+  .btn.ghost{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.04)}
+
+  /* right column card */
+  .planet-card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.03);
+  }
+  .planet-img{
+    height:260px;border-radius:10px;overflow:hidden;background:
+      radial-gradient(circle at 30% 20%, rgba(155,107,255,0.18), transparent 10%),
+      linear-gradient(180deg,#050216,#0b0820);
+    display:flex;align-items:center;justify-content:center;color:#bfbaf0;font-weight:700;
+  }
+
+  section{max-width:1100px;margin:28px auto;padding:18px 20px;position:relative;z-index:2}
+  .panel{background:var(--panel);border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,0.03)}
+
+  /* grid utilities */
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+  h2{font-family:Orbitron;margin:0 0 8px;color:#fff;font-size:20px}
+  .muted{color:var(--muted);font-size:14px}
+
+  /* timeline */
+  .timeline{display:flex;flex-direction:column;gap:12px}
+  .timeline .item{display:flex;gap:12px;align-items:flex-start}
+  .dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(90deg,var(--accent),var(--accent-2));flex:0 0 12px;margin-top:6px}
+  .timeline .item .card{background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
+
+  /* species / weapons */
+  .card-compact{padding:12px;border-radius:10px;background:var(--glass);border:1px solid rgba(255,255,255,0.02)}
+  .tags{display:flex;gap:8px;margin-top:10px}
+
+  /* zethariq */
+  .zeth{font-family:Orbitron;font-size:20px;color:var(--accent);letter-spacing:1px}
+
+  footer{max-width:1100px;margin:28px auto;padding:18px 20px;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+  small{color:var(--muted)}
+
+  /* responsive */
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr;gap:18px}
+    .grid-3{grid-template-columns:1fr}
+    .grid-2{grid-template-columns:1fr}
+    nav{display:none}
+    .nav .mobile-toggle{display:block}
+    .planet-img{height:200px}
+  }
+
+  /* subtle hover */
+  .card-compact:hover{transform:translateY(-4px);transition:all .18s ease}
+  .btn:active{transform:translateY(1px)}
+</style>
+</head>
+<body>
+<div class="stars" aria-hidden="true"></div>
+
+<header>
+  <div class="nav">
+    <div class="brand">
+      <div class="logo">RZ</div>
+      <div>
+        <div style="font-weight:800">RULZETHAR</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">World — Lore — Hidden Wars</div>
+      </div>
+    </div>
+
+    <nav>
+      <a class="nav-link" href="#home">Home</a>
+      <a class="nav-link" href="#about">Universe</a>
+      <a class="nav-link" href="#earth13">Earth-13</a>
+      <a class="nav-link" href="#timeline">Timeline</a>
+      <a class="nav-link" href="#species">Species</a>
+      <a class="nav-link" href="#weapons">Weapons</a>
+      <a class="nav-link" href="#zeth">Zethariq</a>
+      <a class="nav-link" href="#gallery">Gallery</a>
+    </nav>
+  </div>
+</header>
+
+<main id="home" class="hero">
+  <div class="hero-card">
+    <div class="eyebrow">RULZETHAR — Hidden War</div>
+    <h1>The Silent Threat from Earth-13</h1>
+    <p class="lead">Rulzethar — an ancient, living planet of luminous cities, Zethariq language and advanced biosynthesis. In the coming age, a hidden human cabal named <strong>Earth-13</strong> prepares to seize our world. This site documents the lore, species, defenses and the timeline of contact.</p>
+    <div class="cta-row">
+      <button class="btn" onclick="document.getElementById('earth13').scrollIntoView({behavior:'smooth'})">Meet Earth-13</button>
+      <button class="btn ghost" onclick="document.getElementById('timeline').scrollIntoView({behavior:'smooth'})">See Timeline</button>
+    </div>
+
+    <div style="margin-top:20px" class="panel">
+      <h2 style="margin-bottom:6px">Quick Facts</h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <div class="card-compact" style="min-width:140px"><strong>Planet</strong><div class="muted">Rulzethar</div></div>
+        <div class="card-compact" style="min-width:140px"><strong>Language</strong><div class="muted">Zethariq</div></div>
+        <div class="card-compact" style="min-width:140px"><strong>Threat</strong><div class="muted">Earth-13 (hidden)</div></div>
+        <div class="card-compact" style="min-width:140px"><strong>Defense</strong><div class="muted">Aether Shields & Sentients</div></div>
+      </div>
+    </div>
+  </div>
+
+  <aside class="planet-card">
+    <div class="planet-img">
+      <!-- Replace this text with an image -->
+      RULZETHAR — A LIVING CITY PLANET
+    </div>
+
+    <div style="margin-top:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:12px;color:var(--muted)">Status</div>
+          <div style="font-weight:700">Pre-Contact — Vigilant</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:12px;color:var(--muted)">Risk</div>
+          <div style="font-weight:700;color:var(--accent)">Sealed — Potential Breach</div>
+        </div>
+      </div>
+      <div style="margin-top:12px" class="muted">Tip: Click "Meet Earth-13" to jump to the detailed dossier on the hidden threat.</div>
+    </div>
+  </aside>
+</main>
+
+<section id="about" class="panel">
+  <h2>Universe — Rulzethar Overview</h2>
+  <p class="muted">Rulzethar is a living planet where sentient cities and bio-architectures fuse with its native species. Its energy cores—Aether Wells—enable low-friction travel and extraordinary defense systems. Social structures emphasize collective stewardship over extraction.</p>
+
+  <div style="margin-top:12px" class="grid-2">
+    <div class="card-compact">
+      <strong>Social Order</strong>
+      <div class="muted">City-Clusters governed by Councils of Keepers. Knowledge shared via Zethariq dialects and neural glyphs.</div>
+    </div>
+    <div class="card-compact">
+      <strong>Technology</strong>
+      <div class="muted">Bioplasma engineering, aetheric shielding and symbiotic exosuits. Weapons are rarely kinetic—often disruptive to invasive control systems.</div>
+    </div>
+  </div>
+</section>
+
+<section id="earth13" class="panel">
+  <h2>Earth-13 — The Hidden Council</h2>
+  <p class="muted">Earth-13 operates through obscured financial networks, front corporations and covert research programs. To Rulzethar they appear as innocuous trade missions, while in truth they prepare to harvest Aether Wells and biological tech.</p>
+
+  <div style="margin-top:12px" class="grid-3">
+    <div class="card-compact">
+      <strong>Structure</strong>
+      <div class="muted">13 directors spanning finance, energy, defense, media and governance. Publicly absent, privately commanding.</div>
+    </div>
+    <div class="card-compact">
+      <strong>Modus Operandi</strong>
+      <div class="muted">Covert infiltration, data-corruption, sleeper agents and economic destabilization to force cooperation.</div>
+    </div>
+    <div class="card-compact">
+      <strong>Primary Objective</strong>
+      <div class="muted">Acquire Rulzethar Aether Wells to control interstellar influence and unlock regenerative tech.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:12px" class="panel">
+    <h3 style="margin:0 0 8px">How they hide</h3>
+    <ul style="margin:0 0 0 18px;color:var(--muted)">
+      <li>Shell corporations with plausible environmental front projects</li>
+      <li>AI-driven disinformation + narrative laundering</li>
+      <li>Black-market tech procurement and clandestine labs</li>
+    </ul>
+  </div>
+</section>
+
+<section id="timeline" class="panel">
+  <h2>Timeline (Key Events)</h2>
+  <div class="timeline" style="margin-top:12px">
+    <div class="item">
+      <div class="dot"></div>
+      <div class="card"><strong>2046 — First Signal</strong>
+        <div class="muted">Unexplained telemetry detected from orbit near Rulzethar; Earth-13 dispatches cloaked probes.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="dot"></div>
+      <div class="card"><strong>2059 — The First Trade</strong>
+        <div class="muted">A humanitarian mission (front) establishes a research waypoint, secretly mapping Aether signatures.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="dot"></div>
+      <div class="card"><strong>2072 — Data Corruption</strong>
+        <div class="muted">Evidence of narrative laundering appears in HoloMedia archives — Earth-13 again denies involvement.</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="dot"></div>
+      <div class="card"><strong>2088 — Covert Breach (Predicted)</strong>
+        <div class="muted">Earth-13 attempts to install a tethering lattice around an Aether Well — Rulzethar Keepers detect anomalous emissions.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="species" class="panel">
+  <h2>Species & Key Characters</h2>
+  <div style="margin-top:10px" class="grid-3">
+    <div class="card-compact">
+      <strong>Keepers</strong>
+      <div class="muted">Sentient guardians of city-cores; bio-symbiotic with Aether Wells. Wisdom-driven, reluctant to wage war.</div>
+      <div class="tags"><small class="muted">Role: Defenders</small></div>
+    </div>
+
+    <div class="card-compact">
+      <strong>Vargal</strong>
+      <div class="muted">Nomadic predators adapted to aerial life; used by some Rulzethar clans for reconnaissance.</div>
+      <div class="tags"><small class="muted">Role: Scouts</small></div>
+    </div>
+
+    <div class="card-compact">
+      <strong>Symbiote Hosts</strong>
+      <div class="muted">Humanoid-linked organisms that power ceremonial tech and act as living interfaces.</div>
+      <div class="tags"><small class="muted">Role: Engineers</small></div>
+    </div>
+  </div>
+</section>
+
+<section id="weapons" class="panel">
+  <h2>Weapons & Defenses</h2>
+  <div class="grid-2" style="margin-top:12px">
+    <div class="card-compact">
+      <strong>Aether Shields</strong>
+      <div class="muted">Field-based defenses that dampen inbound control signals and misdirect tethering lattices.</div>
+    </div>
+    <div class="card-compact">
+      <strong>Bio-echo Disruptors</strong>
+      <div class="muted">Non-lethal devices that scramble invasive AI and nullify foreign control codes.</div>
+    </div>
+    <div class="card-compact">
+      <strong>Sentient Swarms</strong>
+      <div class="muted">Swarms of micro-organisms that can encapsulate and neutralize boarding drones.</div>
+    </div>
+    <div class="card-compact">
+      <strong>Vargal Lances</strong>
+      <div class="muted">Aerial-guided weaponry used by Vargal riders to intercept craft.</div>
+    </div>
+  </div>
+</section>
+
+<section id="zeth" class="panel">
+  <h2>Zethariq — Language & Samples</h2>
+  <p class="muted">Zethariq is both written and resonant: glyphs carry meaning and tone. Below are curated samples to use in inscriptions and UIs.</p>
+
+  <div style="margin-top:12px" class="grid-2">
+    <div class="card-compact">
+      <div class="zeth">ZAL'ETH — “Home of the Wells”</div>
+      <div class="muted" style="margin-top:8px">Usage: Honorific for city-cores.</div>
+    </div>
+    <div class="card-compact">
+      <div class="zeth">RU-SHAA — “Shield of the Soul”</div>
+      <div class="muted" style="margin-top:8px">Usage: Name for local defensive rites.</div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery" class="panel">
+  <h2>Gallery</h2>
+  <p class="muted">Placeholder images — replace with your art or Instagram exports.</p>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px">
+    <div style="height:140px;border-radius:10px;background:#0b0816;display:flex;align-items:center;justify-content:center;color:var(--muted)">Image 1</div>
+    <div style="height:140px;border-radius:10px;background:#0b0816;display:flex;align-items:center;justify-content:center;color:var(--muted)">Image 2</div>
+    <div style="height:140px;border-radius:10px;background:#0b0816;display:flex;align-items:center;justify-content:center;color:var(--muted)">Image 3</div>
+  </div>
+</section>
+
+<footer>
+  <small>© Rulzethar World — Archive & Dossiers</small>
+  <div style="display:flex;gap:12px">
+    <small class="muted">Made with cosmic intent</small>
+  </div>
+</footer>
+
+<script>
+  // Smooth anchor behavior for older browsers
+  document.querySelectorAll('a.nav-link').forEach(a=>{
+    a.addEventListener('click', e=>{
+      e.preventDefault();
+      const id = a.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    })
+  });
+
+  // Minimal accessibility: reduce motion for users who prefer it
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    document.querySelectorAll('*').forEach(n=>n.style.scrollBehavior='auto');
+  }
+
+  // (Optional) Replace planet image with a remote image if you set planetImage var
+  const planetImage = ''; // set to a valid image URL to auto-replace the right column
+  if(planetImage){
+    const el = document.querySelector('.planet-img');
+    el.style.backgroundImage = `url(${planetImage})`;
+    el.textContent = '';
+    el.style.backgroundSize = 'cover';
+    el.style.backgroundPosition = 'center';
+  }
+</script>
+</body>
+</html>
